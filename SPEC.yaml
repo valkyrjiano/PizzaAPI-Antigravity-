@@ -1,0 +1,1127 @@
+openapi: 3.0.3
+info:
+  title: API Pizzaria
+  description: API REST para gerenciamento de uma pizzaria, baseada no schema PostgreSQL fornecido.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5000
+    description: Servidor local
+
+tags:
+  - name: Usuários
+  - name: Funcionários
+  - name: Clientes
+  - name: Endereços
+  - name: Categorias
+  - name: Ingredientes
+  - name: Produtos
+  - name: Ingredientes dos Produtos
+  - name: Status
+  - name: Pedidos
+  - name: Itens dos Pedidos
+
+paths:
+  /usuarios:
+    get:
+      tags: [Usuários]
+      summary: Listar usuários
+      responses:
+        '200':
+          description: Lista de usuários
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+    post:
+      tags: [Usuários]
+      summary: Criar usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioInput'
+      responses:
+        '201':
+          description: Usuário criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /usuarios/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Usuários]
+      summary: Buscar usuário por ID
+      responses:
+        '200':
+          description: Usuário encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [Usuários]
+      summary: Atualizar usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioInput'
+      responses:
+        '200':
+          description: Usuário atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [Usuários]
+      summary: Excluir usuário
+      responses:
+        '204':
+          description: Usuário excluído
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /funcionarios:
+    get:
+      tags: [Funcionários]
+      summary: Listar funcionários
+      responses:
+        '200':
+          description: Lista de funcionários
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Funcionario'
+    post:
+      tags: [Funcionários]
+      summary: Criar funcionário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FuncionarioInput'
+      responses:
+        '201':
+          description: Funcionário criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Funcionario'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /funcionarios/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Funcionários]
+      summary: Buscar funcionário por ID
+      responses:
+        '200':
+          description: Funcionário encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Funcionario'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [Funcionários]
+      summary: Atualizar funcionário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FuncionarioInput'
+      responses:
+        '200':
+          description: Funcionário atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Funcionario'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [Funcionários]
+      summary: Excluir funcionário
+      responses:
+        '204':
+          description: Funcionário excluído
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /clientes:
+    get:
+      tags: [Clientes]
+      summary: Listar clientes
+      responses:
+        '200':
+          description: Lista de clientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cliente'
+    post:
+      tags: [Clientes]
+      summary: Criar cliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteInput'
+      responses:
+        '201':
+          description: Cliente criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /clientes/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Clientes]
+      summary: Buscar cliente por ID
+      responses:
+        '200':
+          description: Cliente encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [Clientes]
+      summary: Atualizar cliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteInput'
+      responses:
+        '200':
+          description: Cliente atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [Clientes]
+      summary: Excluir cliente
+      responses:
+        '204':
+          description: Cliente excluído
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /enderecos:
+    get:
+      tags: [Endereços]
+      summary: Listar endereços
+      parameters:
+        - name: id_cliente
+          in: query
+          schema:
+            type: integer
+          description: Filtrar por cliente
+      responses:
+        '200':
+          description: Lista de endereços
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Endereco'
+    post:
+      tags: [Endereços]
+      summary: Criar endereço
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnderecoInput'
+      responses:
+        '201':
+          description: Endereço criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Endereco'
+
+  /enderecos/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Endereços]
+      summary: Buscar endereço por ID
+      responses:
+        '200':
+          description: Endereço encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Endereco'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [Endereços]
+      summary: Atualizar endereço
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnderecoInput'
+      responses:
+        '200':
+          description: Endereço atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Endereco'
+    delete:
+      tags: [Endereços]
+      summary: Excluir endereço
+      responses:
+        '204':
+          description: Endereço excluído
+
+  /categorias:
+    get:
+      tags: [Categorias]
+      summary: Listar categorias
+      responses:
+        '200':
+          description: Lista de categorias
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Categoria'
+    post:
+      tags: [Categorias]
+      summary: Criar categoria
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoriaInput'
+      responses:
+        '201':
+          description: Categoria criada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categoria'
+
+  /categorias/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Categorias]
+      summary: Buscar categoria por ID
+      responses:
+        '200':
+          description: Categoria encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categoria'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [Categorias]
+      summary: Atualizar categoria
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoriaInput'
+      responses:
+        '200':
+          description: Categoria atualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categoria'
+    delete:
+      tags: [Categorias]
+      summary: Excluir categoria
+      responses:
+        '204':
+          description: Categoria excluída
+
+  /ingredientes:
+    get:
+      tags: [Ingredientes]
+      summary: Listar ingredientes
+      responses:
+        '200':
+          description: Lista de ingredientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ingrediente'
+    post:
+      tags: [Ingredientes]
+      summary: Criar ingrediente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngredienteInput'
+      responses:
+        '201':
+          description: Ingrediente criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingrediente'
+
+  /ingredientes/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Ingredientes]
+      summary: Buscar ingrediente por ID
+      responses:
+        '200':
+          description: Ingrediente encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingrediente'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [Ingredientes]
+      summary: Atualizar ingrediente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngredienteInput'
+      responses:
+        '200':
+          description: Ingrediente atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingrediente'
+    delete:
+      tags: [Ingredientes]
+      summary: Excluir ingrediente
+      responses:
+        '204':
+          description: Ingrediente excluído
+
+  /status:
+    get:
+      tags: [Status]
+      summary: Listar status de pedidos
+      responses:
+        '200':
+          description: Lista de status
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Status'
+    post:
+      tags: [Status]
+      summary: Criar status
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusInput'
+      responses:
+        '201':
+          description: Status criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /status/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Status]
+      summary: Buscar status por ID
+      responses:
+        '200':
+          description: Status encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [Status]
+      summary: Atualizar status
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusInput'
+      responses:
+        '200':
+          description: Status atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+    delete:
+      tags: [Status]
+      summary: Excluir status
+      responses:
+        '204':
+          description: Status excluído
+
+  /produtos:
+    get:
+      tags: [Produtos]
+      summary: Listar produtos
+      parameters:
+        - name: id_categoria
+          in: query
+          schema:
+            type: integer
+          description: Filtrar por categoria
+        - name: disponivel
+          in: query
+          schema:
+            type: boolean
+          description: Filtrar pela disponibilidade
+      responses:
+        '200':
+          description: Lista de produtos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Produto'
+    post:
+      tags: [Produtos]
+      summary: Criar produto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProdutoInput'
+      responses:
+        '201':
+          description: Produto criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produto'
+
+  /produtos/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Produtos]
+      summary: Buscar produto por ID
+      responses:
+        '200':
+          description: Produto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produto'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [Produtos]
+      summary: Atualizar produto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProdutoInput'
+      responses:
+        '200':
+          description: Produto atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produto'
+    delete:
+      tags: [Produtos]
+      summary: Excluir produto
+      responses:
+        '204':
+          description: Produto excluído
+
+  /produtos/{id}/ingredientes:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Ingredientes dos Produtos]
+      summary: Listar ingredientes de um produto
+      responses:
+        '200':
+          description: Ingredientes vinculados ao produto
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IngredienteProduto'
+    post:
+      tags: [Ingredientes dos Produtos]
+      summary: Vincular ingrediente a produto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id_ingrediente, quantidade_necessaria]
+              properties:
+                id_ingrediente:
+                  type: integer
+                quantidade_necessaria:
+                  type: number
+                  format: double
+                  minimum: 0
+      responses:
+        '201':
+          description: Ingrediente vinculado
+
+  /produtos/{id}/ingredientes/{idIngrediente}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+      - name: idIngrediente
+        in: path
+        required: true
+        schema:
+          type: integer
+    delete:
+      tags: [Ingredientes dos Produtos]
+      summary: Remover ingrediente de um produto
+      responses:
+        '204':
+          description: Vínculo removido
+
+  /pedidos:
+    get:
+      tags: [Pedidos]
+      summary: Listar pedidos
+      parameters:
+        - name: id_cliente
+          in: query
+          schema:
+            type: integer
+        - name: id_status
+          in: query
+          schema:
+            type: integer
+        - name: id_funcionario
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de pedidos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pedido'
+    post:
+      tags: [Pedidos]
+      summary: Criar pedido
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PedidoInput'
+      responses:
+        '201':
+          description: Pedido criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+
+  /pedidos/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Pedidos]
+      summary: Buscar pedido por ID
+      responses:
+        '200':
+          description: Pedido encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [Pedidos]
+      summary: Atualizar pedido
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PedidoInput'
+      responses:
+        '200':
+          description: Pedido atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+    delete:
+      tags: [Pedidos]
+      summary: Excluir pedido
+      responses:
+        '204':
+          description: Pedido excluído
+
+  /pedidos/{id}/itens:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Itens dos Pedidos]
+      summary: Listar itens de um pedido
+      responses:
+        '200':
+          description: Itens do pedido
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemPedido'
+    post:
+      tags: [Itens dos Pedidos]
+      summary: Adicionar item ao pedido
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemPedidoInput'
+      responses:
+        '201':
+          description: Item adicionado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemPedido'
+
+  /pedidos/{id}/itens/{idItem}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+      - name: idItem
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags: [Itens dos Pedidos]
+      summary: Atualizar item do pedido
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemPedidoInput'
+      responses:
+        '200':
+          description: Item atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemPedido'
+    delete:
+      tags: [Itens dos Pedidos]
+      summary: Remover item do pedido
+      responses:
+        '204':
+          description: Item removido
+
+components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: Identificador do recurso
+      schema:
+        type: integer
+        minimum: 1
+
+  responses:
+    BadRequest:
+      description: Dados inválidos
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Recurso não encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        id_usuario:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 160
+        senha:
+          type: string
+          maxLength: 255
+        ativo:
+          type: boolean
+          default: true
+        nome_perfil:
+          type: string
+          maxLength: 80
+        descricao:
+          type: string
+          maxLength: 500
+      required: [id_usuario, email, senha, ativo, nome_perfil]
+
+    UsuarioInput:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 160
+        senha:
+          type: string
+          maxLength: 255
+        ativo:
+          type: boolean
+          default: true
+        nome_perfil:
+          type: string
+          maxLength: 80
+        descricao:
+          type: string
+          maxLength: 500
+      required: [email, senha, nome_perfil]
+
+    Funcionario:
+      type: object
+      properties:
+        id_funcionario: {type: integer, readOnly: true}
+        id_usuario: {type: integer}
+        nome: {type: string, maxLength: 120}
+        cpf: {type: string, maxLength: 14}
+        cargo: {type: string, maxLength: 80}
+        telefone: {type: string, maxLength: 20}
+      required: [id_funcionario, id_usuario, nome, cpf, cargo]
+
+    FuncionarioInput:
+      type: object
+      properties:
+        id_usuario: {type: integer}
+        nome: {type: string, maxLength: 120}
+        cpf: {type: string, maxLength: 14}
+        cargo: {type: string, maxLength: 80}
+        telefone: {type: string, maxLength: 20}
+      required: [id_usuario, nome, cpf, cargo]
+
+    Cliente:
+      type: object
+      properties:
+        id_cliente: {type: integer, readOnly: true}
+        id_usuario: {type: integer}
+        nome: {type: string, maxLength: 120}
+        cpf: {type: string, maxLength: 14}
+        telefone: {type: string, maxLength: 20}
+      required: [id_cliente, id_usuario, nome, cpf]
+
+    ClienteInput:
+      type: object
+      properties:
+        id_usuario: {type: integer}
+        nome: {type: string, maxLength: 120}
+        cpf: {type: string, maxLength: 14}
+        telefone: {type: string, maxLength: 20}
+      required: [id_usuario, nome, cpf]
+
+    Endereco:
+      type: object
+      properties:
+        id_endereco: {type: integer, readOnly: true}
+        id_cliente: {type: integer}
+        cep: {type: string, maxLength: 9}
+        logradouro: {type: string, maxLength: 160}
+        numero: {type: string, maxLength: 20}
+        complemento: {type: string, maxLength: 100, nullable: true}
+        bairro: {type: string, maxLength: 100}
+        cidade: {type: string, maxLength: 100}
+        uf: {type: string, minLength: 2, maxLength: 2}
+      required: [id_endereco, id_cliente, cep, logradouro, numero, bairro, cidade, uf]
+
+    EnderecoInput:
+      type: object
+      properties:
+        id_cliente: {type: integer}
+        cep: {type: string, maxLength: 9}
+        logradouro: {type: string, maxLength: 160}
+        numero: {type: string, maxLength: 20}
+        complemento: {type: string, maxLength: 100, nullable: true}
+        bairro: {type: string, maxLength: 100}
+        cidade: {type: string, maxLength: 100}
+        uf: {type: string, minLength: 2, maxLength: 2}
+      required: [id_cliente, cep, logradouro, numero, bairro, cidade, uf]
+
+    Categoria:
+      type: object
+      properties:
+        id_categoria: {type: integer, readOnly: true}
+        nome: {type: string, maxLength: 100}
+        descricao: {type: string, maxLength: 500, nullable: true}
+      required: [id_categoria, nome]
+
+    CategoriaInput:
+      type: object
+      properties:
+        nome: {type: string, maxLength: 100}
+        descricao: {type: string, maxLength: 500, nullable: true}
+      required: [nome]
+
+    Ingrediente:
+      type: object
+      properties:
+        id_ingrediente: {type: integer, readOnly: true}
+        nome: {type: string, maxLength: 120}
+        quantidade_estoque:
+          type: number
+          format: double
+          minimum: 0
+        unidade_medida: {type: string, maxLength: 20}
+      required: [id_ingrediente, nome, quantidade_estoque, unidade_medida]
+
+    IngredienteInput:
+      type: object
+      properties:
+        nome: {type: string, maxLength: 120}
+        quantidade_estoque:
+          type: number
+          format: double
+          minimum: 0
+          default: 0
+        unidade_medida: {type: string, maxLength: 20}
+      required: [nome, unidade_medida]
+
+    Status:
+      type: object
+      properties:
+        id_status: {type: integer, readOnly: true}
+        nome_status: {type: string, maxLength: 50}
+      required: [id_status, nome_status]
+
+    StatusInput:
+      type: object
+      properties:
+        nome_status: {type: string, maxLength: 50}
+      required: [nome_status]
+
+    Produto:
+      type: object
+      properties:
+        id_produto: {type: integer, readOnly: true}
+        id_categoria: {type: integer}
+        nome: {type: string, maxLength: 120}
+        tamanho: {type: string, maxLength: 30}
+        preco:
+          type: number
+          format: double
+          minimum: 0
+        disponivel:
+          type: boolean
+          default: true
+      required: [id_produto, id_categoria, nome, tamanho, preco, disponivel]
+
+    ProdutoInput:
+      type: object
+      properties:
+        id_categoria: {type: integer}
+        nome: {type: string, maxLength: 120}
+        tamanho: {type: string, maxLength: 30}
+        preco:
+          type: number
+          format: double
+          minimum: 0
+        disponivel:
+          type: boolean
+          default: true
+      required: [id_categoria, nome, tamanho, preco]
+
+    IngredienteProduto:
+      type: object
+      properties:
+        id_ingrediente_produto: {type: integer, readOnly: true}
+        id_produto: {type: integer}
+        id_ingrediente: {type: integer}
+        quantidade_necessaria:
+          type: number
+          format: double
+          exclusiveMinimum: 0
+      required: [id_ingrediente_produto, id_produto, id_ingrediente, quantidade_necessaria]
+
+    Pedido:
+      type: object
+      properties:
+        id_pedido: {type: integer, readOnly: true}
+        id_cliente: {type: integer}
+        id_funcionario: {type: integer}
+        id_status: {type: integer}
+        id_endereco: {type: integer}
+        data_hora_pedido:
+          type: string
+          format: date-time
+          readOnly: true
+        forma_pagamento: {type: string, maxLength: 40}
+        taxa_entrega:
+          type: number
+          format: double
+          minimum: 0
+          default: 0
+        valor_total:
+          type: number
+          format: double
+          minimum: 0
+      required: [id_pedido, id_cliente, id_funcionario, id_status, id_endereco, data_hora_pedido, forma_pagamento, taxa_entrega, valor_total]
+
+    PedidoInput:
+      type: object
+      properties:
+        id_cliente: {type: integer}
+        id_funcionario: {type: integer}
+        id_status: {type: integer}
+        id_endereco: {type: integer}
+        forma_pagamento: {type: string, maxLength: 40}
+        taxa_entrega:
+          type: number
+          format: double
+          minimum: 0
+          default: 0
+        valor_total:
+          type: number
+          format: double
+          minimum: 0
+      required: [id_cliente, id_funcionario, id_status, id_endereco, forma_pagamento, valor_total]
+
+    ItemPedido:
+      type: object
+      properties:
+        id_item_pedido: {type: integer, readOnly: true}
+        id_pedido: {type: integer}
+        id_produto: {type: integer}
+        quantidade:
+          type: integer
+          minimum: 1
+        preco_unitario:
+          type: number
+          format: double
+          minimum: 0
+        subtotal:
+          type: number
+          format: double
+          minimum: 0
+        observacao:
+          type: string
+          maxLength: 500
+          nullable: true
+      required: [id_item_pedido, id_pedido, id_produto, quantidade, preco_unitario, subtotal]
+
+    ItemPedidoInput:
+      type: object
+      properties:
+        id_produto: {type: integer}
+        quantidade:
+          type: integer
+          minimum: 1
+        preco_unitario:
+          type: number
+          format: double
+          minimum: 0
+        subtotal:
+          type: number
+          format: double
+          minimum: 0
+        observacao:
+          type: string
+          maxLength: 500
+          nullable: true
+      required: [id_produto, quantidade, preco_unitario, subtotal]
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        details:
+          type: string
+          nullable: true
+      required: [message]
