@@ -2,9 +2,9 @@
 
 > **Documento Arquitetural e Operacional**  
 > **Autores:**
-> Guilherme Gomes
-> Gabriel Flores
-> Marcelo Oliveira
+> Guilherme Gomes |
+> Gabriel Flores |
+> Marcelo Oliveira |
 > Maria Eduarda Gonçalves  
 > **Metodologia:** Spec-Driven Development (SDD) & Clean Architecture  
 > **Stack:** FastAPI | SQLAlchemy 2.0 ORM | Pydantic v2 | JWT (PyJWT HS256) | SQLite  
