@@ -2,10 +2,10 @@
 
 > **Documento Arquitetural e Operacional**  
 > **Autores:**
-> Guilherme Gomes |
-> Gabriel Flores |
-> Marcelo Oliveira |
-> Maria Eduarda Gonçalves  
+ Guilherme Gomes RA: 2840482423037|
+ Gabriel Flores RA: 2840482423010|
+ Marcelo Oliveira RA: 2840482423043|
+ Maria Eduarda Gonçalves RA: 2040482513049 
 > **Metodologia:** Spec-Driven Development (SDD) & Clean Architecture  
 > **Stack:** FastAPI | SQLAlchemy 2.0 ORM | Pydantic v2 | JWT (PyJWT HS256) | SQLite  
 > **Conformidade:** Padrão RFC 9457 / Problem Details
